@@ -134,14 +134,13 @@ def on_res_clips_change(resulting_clips):
         results = [gr.Video(clip, visible=True, label=clip.split('/')[-1], interactive=False, include_audio=True) for clip in resulting_clips]
         while len(results) < 6:
             results.append(gr.Video(visible=False))
-    return results
 
-def on_zip_button_click(clips):
     zip_filename = "clips.zip"
     with ZipFile(zip_filename, 'w') as zipf:
-        for videofile in clips:
+        for videofile in resulting_clips:
             zipf.write(videofile, os.path.basename(videofile))
-    return zip_filename
+
+    return [zip_filename] + results
 
 # INTERFACE
 with gr.Blocks() as demo:
@@ -246,11 +245,8 @@ with gr.Blocks() as demo:
     resulting_clips.change(
         fn=on_res_clips_change, 
         inputs=resulting_clips, 
-        outputs=[res_v1, res_v2, res_v3, res_v4, res_v5, res_v6]
+        outputs=[zip_btn, res_v1, res_v2, res_v3, res_v4, res_v5, res_v6]
     )
-    zip_btn.click(fn=lambda x: gr.DownloadButton('Downloading...', interactive=False), outputs=zip_btn).then(
-        fn=on_zip_button_click, inputs=resulting_clips
-    ).then(fn=lambda x: gr.DownloadButton('Download (.zip)', interactive=True), outputs=zip_btn)
 
 # Launching demo
 demo.launch(debug=False, share=True)
