@@ -154,7 +154,7 @@ with gr.Blocks() as demo:
         video = gr.Video(label='Upload your videofile: ')
         video_duration = gr.Number(visible=False, value=10, minimum=0)
         with gr.Tab('Split'):
-            parts = gr.Number(value=1, minimum=1, maximum=6, label='Parts to split: ')
+            parts = gr.Number(value=1, minimum=1, maximum=6, label='Parts to split (Max 6): ')
             clip_number = gr.Number(label='Part to work with: ', value=1, maximum=1)
             split_btn = gr.Button('Split')
         with gr.Tab('Trim'):
